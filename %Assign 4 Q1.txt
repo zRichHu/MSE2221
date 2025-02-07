@@ -1,0 +1,12 @@
+%Assign 4 Q1
+
+function [answer] = convert_bases(num, current_base, new_base)
+    temp = num;
+    answer = "";
+    while temp ~= 0
+        answer = strcat(int2str(rem(temp, new_base)), answer)
+        temp = temp / current_base;
+    end
+end
+
+convert_bases(10,10,2)
