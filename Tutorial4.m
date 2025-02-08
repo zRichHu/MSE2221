@@ -37,29 +37,47 @@ end
 
 function [accStr] = convert(num)
     
-    numStr = num2str(num)
+    numStr = num2str(num);
     
-    d = dictionary("0","000","1","001","2","010","3","011","4","100","5","101","6","110","7","111")
+    d = dictionary("0","000","1","001","2","010","3","011","4","100","5","101","6","110","7","111");
    
-    accStr=""
+    accStr="";
     for x = 1:1:strlength(numStr)
         if(numStr(x) == ".")
-            accStr = strcat(accStr,".")
+            accStr = strcat(accStr,".");
             continue
 
         end
-        newStr = d(numStr(x))
+        newStr = d(numStr(x));
 
-        accStr = strcat(accStr,newStr) %convert to binary
+        accStr = strcat(accStr,newStr); %convert to binary
     end
     
 end
-
-
-function [] = openFile(fileName)
-    fileID = fopen(fileName, "r");
-
-    fprintf(fileID,"\n",x);
+function openFile(fileName)
+    fileID = fopen(fileName, "r"); % Open file for reading
     
+    if fileID == -1
+        error("Could not open the file.");
+    end
+
+    while ~feof(fileID)
+        line = fgetl(fileID); % Read a line from the file
+        if isempty(line) || isnan(str2double(line))
+            continue; % Skip empty or invalid lines
+        end
+        num = str2double(line); % Convert string to number
+        convertedNum = convert(num); % Convert to base 8
+        fprintf("Original: %s | Octal: %s\n", line, convertedNum);
+    end
+
+    fclose(fileID); % Close the file
 end
-disp(convert(567.2))
+
+
+disp("00110001 to base 10: "+ convert_bases(00110001,2,10));
+disp("0.01011 to base 10: "+ convert_bases(0.01011,2,10))
+disp("61565 to base 2: " + convert(61565))
+
+x = input("Enter file name: ");
+openFile(x);
