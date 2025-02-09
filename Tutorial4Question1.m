@@ -1,7 +1,11 @@
-function [accVal] = convert_bases(num, current_base, new_base)
+function [accVal] = convert_to_decimal(num, current_base)
+    neg = false;
+    if num < 0
+        num = abs(num);
+        neg = true;
+    end
     
     numStr = num2str(num);
-    length = strlength(numStr);%6
     
     splitNumStr = split(numStr,".");
 
@@ -24,6 +28,37 @@ function [accVal] = convert_bases(num, current_base, new_base)
         accVal = accVal + current_base^x * str2double(leftStr(counter));
         counter = counter + 1;
     end
+
+    
+    tempstr = num2str(accVal);
+    if neg%addes - or +
+        accVal = "-";
+    else
+        accVal = "+";
+    end
+    expo = 0;
+    if str2double(tempstr) >= 1
+        if contains(tempstr, ".")
+            pos = strfind(tempstr, ".");
+            tempstr = strrep(tempstr, ".", "");
+            expo = pos-2;%figure out exponent
+        else
+            expo = strlength(tempstr) - 1;%accounts for the first digit always being before
+        end
+        accVal = strcat(accVal,tempstr(1), ".", tempstr(2:end), " x 2^", int2str(expo));
+    else 
+        count = 0;
+        tempthing = str2double(tempstr);
+        while tempthing < 1
+            tempthing = tempthing * 10;
+            count = count + 1;%figure out expoenent
+        end
+        tempstr = num2str(tempthing);
+        expo = 0 - count;
+        accVal = strcat(accVal,tempstr, " x 2^", int2str(expo));
+    end
+    
+    
     
     %{
     temp = num;
@@ -35,8 +70,12 @@ function [accVal] = convert_bases(num, current_base, new_base)
     %}
 end
 
-function [accStr] = convert(num)
-    
+function [accStr] = octal_to_binary(num)
+    neg = false;
+    if num < 0
+        num = abs(num);
+        neg = true;
+    end
     numStr = num2str(num);
     
     d = dictionary("0","000","1","001","2","010","3","011","4","100","5","101","6","110","7","111");
@@ -51,6 +90,12 @@ function [accStr] = convert(num)
         newStr = d(numStr(x));
 
         accStr = strcat(accStr,newStr); %convert to binary
+    end
+
+    if neg%addes - or +
+        accStr = strcat("-",accStr);
+    else
+        accStr = strcat("+",accStr);
     end
     
 end
