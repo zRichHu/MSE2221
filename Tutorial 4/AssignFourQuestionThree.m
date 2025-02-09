@@ -1,6 +1,6 @@
 %{
-Initializing and Arrays for Constants in 
-Impedance Formula and the Z = 100 
+Initializing Arrays for the Z = 100 Line and
+Constants used in Impedance Formula
 %}
 freq_array = linspace(1000, 5000, 1000);
 omega_array = 2*pi*freq_array;
