@@ -62,22 +62,20 @@ function openFile(fileName)
     end
 
     while ~feof(fileID)
-        line = fgetl(fileID); % Read a line from the file
-        if isempty(line) || isnan(str2double(line))
-            continue; % Skip empty or invalid lines
+        line = strtrim(fgetl(fileID)); % Read line and remove whitespace
+        if isempty(line) || contains(line, ",")
+            continue; % Skip empty lines and malformed lines
         end
-        num = str2double(line); % Convert string to number
-        convertedNum = convert(num); % Convert to base 8
-        fprintf("Original: %s | Octal: %s\n", line, convertedNum);
+        convertedNum = convert_bases(line, 8, 10); % Pass as string
+        fprintf("Original base 8: %s, Base 10: %f\n", line, convertedNum);
     end
 
     fclose(fileID); % Close the file
 end
 
-
 disp("00110001 to base 10: "+ convert_bases(00110001,2,10));
 disp("0.01011 to base 10: "+ convert_bases(0.01011,2,10))
 disp("61565 to base 2: " + convert(61565))
 
-x = input("Enter file name: ");
+x = input("Enter file name: ","S");
 openFile(x);
